@@ -3,6 +3,8 @@ package com.levelup.backend.service;
 import com.levelup.backend.model.User;
 import com.levelup.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,5 +44,20 @@ public class UserService {
 
     public void delete(Long id) {
         repo.deleteById(id);
+    }
+
+    /**
+     * Verifica si el ID corresponde al usuario actualmente autenticado
+     */
+    public boolean isCurrentUser(Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            return false;
+        }
+        
+        String currentEmail = auth.getName();
+        User currentUser = getByEmail(currentEmail);
+        
+        return currentUser != null && currentUser.getId().equals(id);
     }
 }

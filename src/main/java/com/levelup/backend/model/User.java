@@ -26,7 +26,7 @@ public class User {
     private Boolean isAdmin = false;
 
     @Column(name = "tipo", nullable = false)
-    private Integer tipo = 1; // 1=CLIENTE, 2=VENDEDOR, 3=ADMIN
+    private Integer tipo = 0; // 0=CLIENTE, 1=VENDEDOR, 2=ADMIN
 
     public User() {
     }
@@ -38,7 +38,7 @@ public class User {
         this.name = name;
         this.fechaNac = fechaNac;
         this.isAdmin = isAdmin;
-        this.tipo = isAdmin ? 3 : 1;
+        this.tipo = isAdmin ? 2 : 0;
     }
 
     public User(Long id, String email, String password, String name, LocalDateTime fechaNac, Boolean isAdmin, Integer tipo) {
@@ -98,7 +98,7 @@ public class User {
     public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
         if (isAdmin) {
-            this.tipo = 3;
+            this.tipo = 2;
         }
     }
 
@@ -108,28 +108,28 @@ public class User {
 
     public void setTipo(Integer tipo) {
         this.tipo = tipo;
-        this.isAdmin = (tipo == 3);
+        this.isAdmin = (tipo == 2);
     }
 
     // Métodos helper para facilitar el uso
     public String getTipoDescripcion() {
         switch (tipo) {
-            case 1: return "CLIENTE";
-            case 2: return "VENDEDOR";
-            case 3: return "ADMIN";
+            case 0: return "CLIENTE";
+            case 1: return "VENDEDOR";
+            case 2: return "ADMIN";
             default: return "DESCONOCIDO";
         }
     }
 
     public boolean isCliente() {
-        return tipo == 1;
+        return tipo == 0;
     }
 
     public boolean isVendedor() {
-        return tipo == 2;
+        return tipo == 1;
     }
 
     public boolean isAdministrador() {
-        return tipo == 3;
+        return tipo == 2;
     }
 }

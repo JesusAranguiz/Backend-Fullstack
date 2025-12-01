@@ -38,4 +38,15 @@ public class UserController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
+    @PatchMapping("/{id}/tipo")
+    public User updateTipo(@PathVariable Long id, @RequestBody java.util.Map<String, Integer> body) {
+        Integer tipo = body.get("tipo");
+        return service.updateTipo(id, tipo);
+    }
+
+    @GetMapping("/by-tipo/{tipo}")
+    public List<User> getByTipo(@PathVariable Integer tipo) {
+        return service.getByTipo(tipo);
+    }
 }

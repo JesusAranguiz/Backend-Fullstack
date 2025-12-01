@@ -1,0 +1,46 @@
+package com.levelup.backend.service;
+
+import com.levelup.backend.model.User;
+import com.levelup.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository repo;
+
+    public List<User> getAll() {
+        return repo.findAll();
+    }
+
+    public User getById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    public User getByEmail(String email) {
+        return repo.findByEmail(email).orElse(null);
+    }
+
+    public User create(User user) {
+        return repo.save(user);
+    }
+
+    public User update(Long id, User user) {
+        User existing = getById(id);
+        if (existing == null)
+            return null;
+        if (user.getEmail() != null) existing.setEmail(user.getEmail());
+        if (user.getName() != null) existing.setName(user.getName());
+        if (user.getPassword() != null) existing.setPassword(user.getPassword());
+        if (user.getFechaNac() != null) existing.setFechaNac(user.getFechaNac());
+        if (user.getIsAdmin() != null) existing.setIsAdmin(user.getIsAdmin());
+        return repo.save(existing);
+    }
+
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+}

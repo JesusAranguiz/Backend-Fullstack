@@ -19,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,17 +79,31 @@ public class AuthController {
             // Cargar detalles del usuario
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
 
+            // Obtener el usuario completo de la base de datos
+            User user = userRepository.findByEmail(loginRequest.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
             // Generar token JWT
             final String jwt = jwtUtil.generateToken(userDetails);
 
-            // Extraer rol
-            String role = userDetails.getAuthorities().stream()
-                .findFirst()
-                .map(auth -> auth.getAuthority())
-                .orElse("ROLE_USER");
+            // Determinar rol según el tipo de usuario
+            String role;
+            switch (user.getTipo()) {
+                case 0:
+                    role = "ROLE_CLIENTE";
+                    break;
+                case 1:
+                    role = "ROLE_VENDEDOR";
+                    break;
+                case 2:
+                    role = "ROLE_ADMIN";
+                    break;
+                default:
+                    role = "ROLE_CLIENTE";
+            }
 
-            // Retornar respuesta con token
-            return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getUsername(), role));
+            // Retornar respuesta con token, username y role
+            return ResponseEntity.ok(new LoginResponse(jwt, user.getEmail(), role));
 
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body("Credenciales inválidas");

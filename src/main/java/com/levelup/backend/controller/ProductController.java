@@ -19,30 +19,30 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @Operation(summary = "Listar todos los productos", description = "Disponible para USER y ADMIN")
+    @Operation(summary = "Listar todos los productos", description = "Disponible para CLIENTE, VENDEDOR y ADMIN")
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('CLIENTE', 'VENDEDOR', 'ADMIN')")
     public List<Product> list() {
         return service.getAll();
     }
 
-    @Operation(summary = "Obtener producto por ID", description = "Disponible para USER y ADMIN")
+    @Operation(summary = "Obtener producto por ID", description = "Disponible para CLIENTE, VENDEDOR y ADMIN")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('CLIENTE', 'VENDEDOR', 'ADMIN')")
     public Product get(@PathVariable Long id) {
         return service.getById(id);
     }
 
-    @Operation(summary = "Crear nuevo producto", description = "Solo disponible para ADMIN")
+    @Operation(summary = "Crear nuevo producto", description = "Disponible para VENDEDOR y ADMIN")
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('VENDEDOR', 'ADMIN')")
     public Product create(@RequestBody Product product) {
         return service.create(product);
     }
 
-    @Operation(summary = "Actualizar producto existente", description = "Solo disponible para ADMIN")
+    @Operation(summary = "Actualizar producto existente", description = "Disponible para VENDEDOR y ADMIN")
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('VENDEDOR', 'ADMIN')")
     public Product update(@PathVariable Long id, @RequestBody Product product) {
         return service.update(id, product);
     }

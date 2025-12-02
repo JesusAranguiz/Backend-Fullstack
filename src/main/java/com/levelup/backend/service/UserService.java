@@ -2,10 +2,12 @@ package com.levelup.backend.service;
 
 import com.levelup.backend.model.User;
 import com.levelup.backend.repository.UserRepository;
+import com.levelup.backend.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +15,9 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository repo;
+    
+    @Autowired
+    private OrderRepository orderRepository;
 
     public List<User> getAll() {
         return repo.findAll();
@@ -57,6 +62,9 @@ public class UserService {
     }
 
     public void delete(Long id) {
+        // Primero eliminar todas las órdenes del usuario (cascada a order_items automática)
+        orderRepository.deleteAll(orderRepository.findByUserId(id));
+        // Luego eliminar el usuario
         repo.deleteById(id);
     }
 

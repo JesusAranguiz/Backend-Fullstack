@@ -19,9 +19,8 @@ public class BlogsController {
     @Autowired
     private BlogsService service;
 
-    @Operation(summary = "Listar todos los blogs", description = "Disponible para USER y ADMIN. Puede filtrar por categoría y búsqueda")
+    @Operation(summary = "Listar todos los blogs", description = "Acceso público para lectura")
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Blogs> list(@RequestParam(required = false) String category,
                             @RequestParam(required = false) String q) {
         if (category != null || q != null) {
@@ -30,16 +29,14 @@ public class BlogsController {
         return service.getAll();
     }
 
-    @Operation(summary = "Obtener todas las categorías", description = "Disponible para USER y ADMIN")
+    @Operation(summary = "Obtener todas las categorías", description = "Acceso público")
     @GetMapping("/categories")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<String> getCategories() {
         return service.getAllCategories();
     }
 
-    @Operation(summary = "Obtener blog por ID", description = "Disponible para USER y ADMIN")
+    @Operation(summary = "Obtener blog por ID", description = "Acceso público")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Blogs get(@PathVariable Long id) {
         return service.getById(id);
     }

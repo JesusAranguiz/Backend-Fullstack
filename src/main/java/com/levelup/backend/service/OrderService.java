@@ -57,6 +57,8 @@ public class OrderService {
             item.setProduct(product);
             item.setUnitPrice(product.getPrice());
             item.setSubtotal(item.getQuantity() * product.getPrice());
+            // Establecer la relación bidireccional ANTES de guardar
+            item.setOrder(order);
         }
         
         // Calcular el total basado en los items
@@ -65,15 +67,8 @@ public class OrderService {
             .sum();
         order.setTotal(total);
         
-        // Guardar la orden
-        Order savedOrder = orderRepo.save(order);
-        
-        // Establecer la relación con los items
-        for (OrderItem item : savedOrder.getItems()) {
-            item.setOrder(savedOrder);
-        }
-        
-        return orderRepo.save(savedOrder);
+        // Guardar la orden (cascade guardará los items automáticamente)
+        return orderRepo.save(order);
     }
 
     @Transactional
@@ -129,6 +124,10 @@ public class OrderService {
     // Métodos adicionales para estadísticas
     public Long countByStatus(String status) {
         return (long) orderRepo.findByStatus(status).size();
+    }
+
+    public Long countAll() {
+        return orderRepo.count();
     }
 
     public Double getTotalRevenue() {

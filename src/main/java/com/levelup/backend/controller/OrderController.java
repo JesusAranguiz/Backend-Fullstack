@@ -106,4 +106,13 @@ public class OrderController {
         stats.put("deliveredOrders", service.countByStatus("ENTREGADO"));
         return stats;
     }
+
+    @Operation(summary = "Contar órdenes totales", description = "Obtiene el número total de órdenes. Solo ADMIN o VENDEDOR")
+    @GetMapping("/count")
+    @PreAuthorize("hasAnyRole('VENDEDOR', 'ADMIN')")
+    public ResponseEntity<Map<String, Long>> getCount() {
+        Map<String, Long> response = new HashMap<>();
+        response.put("count", service.countAll());
+        return ResponseEntity.ok(response);
+    }
 }

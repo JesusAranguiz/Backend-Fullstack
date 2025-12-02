@@ -38,7 +38,6 @@ public class UserService {
         if (user.getName() != null) existing.setName(user.getName());
         if (user.getPassword() != null) existing.setPassword(user.getPassword());
         if (user.getFechaNac() != null) existing.setFechaNac(user.getFechaNac());
-        if (user.getIsAdmin() != null) existing.setIsAdmin(user.getIsAdmin());
         if (user.getTipo() != null) existing.setTipo(user.getTipo());
         return repo.save(existing);
     }

@@ -2,7 +2,6 @@ package com.levelup.backend.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -69,7 +68,7 @@ public class JwtUtil {
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .signWith(SECRET_KEY)
                 .compact();
     }
 

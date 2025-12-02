@@ -22,32 +22,18 @@ public class User {
     @Column(name = "fecha_nac", nullable = false)
     private LocalDateTime fechaNac;
 
-    @Column(name = "is_admin", nullable = false)
-    private Boolean isAdmin = false;
-
     @Column(name = "tipo", nullable = false)
     private Integer tipo = 0; // 0=CLIENTE, 1=VENDEDOR, 2=ADMIN
 
     public User() {
     }
 
-    public User(Long id, String email, String password, String name, LocalDateTime fechaNac, Boolean isAdmin) {
+    public User(Long id, String email, String password, String name, LocalDateTime fechaNac, Integer tipo) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.fechaNac = fechaNac;
-        this.isAdmin = isAdmin;
-        this.tipo = isAdmin ? 2 : 0;
-    }
-
-    public User(Long id, String email, String password, String name, LocalDateTime fechaNac, Boolean isAdmin, Integer tipo) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.fechaNac = fechaNac;
-        this.isAdmin = isAdmin;
         this.tipo = tipo;
     }
 
@@ -91,24 +77,21 @@ public class User {
         this.fechaNac = fechaNac;
     }
 
-    public Boolean getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(Boolean isAdmin) {
-        this.isAdmin = isAdmin;
-        if (isAdmin) {
-            this.tipo = 2;
-        }
-    }
-
     public Integer getTipo() {
         return tipo;
     }
 
     public void setTipo(Integer tipo) {
         this.tipo = tipo;
-        this.isAdmin = (tipo == 2);
+    }
+
+    // Método de compatibilidad para código legacy
+    public Boolean getIsAdmin() {
+        return tipo == 2;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.tipo = isAdmin ? 2 : 0;
     }
 
     // Métodos helper para facilitar el uso

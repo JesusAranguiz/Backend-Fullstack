@@ -23,8 +23,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
-        // Determinar el rol basado en isAdmin
-        String role = user.getIsAdmin() ? "ROLE_ADMIN" : "ROLE_USER";
+        // Determinar el rol basado en tipo (0=CLIENTE, 1=VENDEDOR, 2=ADMIN)
+        String role = user.getTipo() == 2 ? "ROLE_ADMIN" : "ROLE_USER";
 
         // Retornar UserDetails de Spring Security
         return org.springframework.security.core.userdetails.User.builder()

@@ -126,6 +126,10 @@ public class OrderService {
         return (long) orderRepo.findByStatus(status).size();
     }
 
+    public Long countAll() {
+        return orderRepo.count();
+    }
+
     public Double getTotalRevenue() {
         return orderRepo.findAll().stream()
             .filter(order -> !"CANCELADO".equals(order.getStatus()))

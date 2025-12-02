@@ -41,9 +41,9 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @Operation(summary = "Obtener perfil actual", description = "Obtiene el perfil del usuario autenticado")
+    @Operation(summary = "Obtener perfil actual", description = "Obtiene el perfil del usuario autenticado con todos sus datos incluyendo tipo")
     @GetMapping("/me")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('CLIENTE', 'VENDEDOR', 'ADMIN')")
     public ResponseEntity<?> getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
@@ -79,13 +79,17 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Actualizar tipo de usuario", description = "Solo disponible para ADMIN")
     @PatchMapping("/{id}/tipo")
+    @PreAuthorize("hasRole('ADMIN')")
     public User updateTipo(@PathVariable Long id, @RequestBody java.util.Map<String, Integer> body) {
         Integer tipo = body.get("tipo");
         return service.updateTipo(id, tipo);
     }
 
+    @Operation(summary = "Listar usuarios por tipo", description = "Solo disponible para ADMIN")
     @GetMapping("/by-tipo/{tipo}")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getByTipo(@PathVariable Integer tipo) {
         return service.getByTipo(tipo);
     }

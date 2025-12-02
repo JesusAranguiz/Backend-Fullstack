@@ -27,9 +27,13 @@ public class ProductService {
         Product existing = getById(id);
         if (existing == null)
             return null;
-        existing.setName(product.getName());
-        existing.setCategory(product.getCategory());
-        existing.setPrice(product.getPrice());
+        if (product.getName() != null) existing.setName(product.getName());
+        if (product.getCategory() != null) existing.setCategory(product.getCategory());
+        if (product.getPrice() != null) existing.setPrice(product.getPrice());
+        if (product.getDescription() != null) existing.setDescription(product.getDescription());
+        if (product.getOferta() != null) existing.setOferta(product.getOferta());
+        if (product.getImage() != null) existing.setImage(product.getImage());
+        if (product.getStock() != null) existing.setStock(product.getStock());
         return repo.save(existing);
     }
 

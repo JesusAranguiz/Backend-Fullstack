@@ -78,4 +78,15 @@ public class UserController {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{id}/tipo")
+    public User updateTipo(@PathVariable Long id, @RequestBody java.util.Map<String, Integer> body) {
+        Integer tipo = body.get("tipo");
+        return service.updateTipo(id, tipo);
+    }
+
+    @GetMapping("/by-tipo/{tipo}")
+    public List<User> getByTipo(@PathVariable Integer tipo) {
+        return service.getByTipo(tipo);
+    }
 }

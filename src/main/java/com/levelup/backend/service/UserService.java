@@ -39,7 +39,22 @@ public class UserService {
         if (user.getPassword() != null) existing.setPassword(user.getPassword());
         if (user.getFechaNac() != null) existing.setFechaNac(user.getFechaNac());
         if (user.getIsAdmin() != null) existing.setIsAdmin(user.getIsAdmin());
+        if (user.getTipo() != null) existing.setTipo(user.getTipo());
         return repo.save(existing);
+    }
+
+    public User updateTipo(Long id, Integer tipo) {
+        User existing = getById(id);
+        if (existing == null)
+            return null;
+        existing.setTipo(tipo);
+        return repo.save(existing);
+    }
+
+    public List<User> getByTipo(Integer tipo) {
+        return repo.findAll().stream()
+            .filter(user -> tipo.equals(user.getTipo()))
+            .toList();
     }
 
     public void delete(Long id) {

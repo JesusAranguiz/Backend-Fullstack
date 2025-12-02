@@ -33,7 +33,10 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
+                // Endpoints públicos (autenticación, registro, swagger)
                 .requestMatchers("/api/auth/**", "/api/v1/users", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                
+                // El resto requiere autenticación (controlado por @PreAuthorize en controllers)
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -66,3 +69,4 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
+
